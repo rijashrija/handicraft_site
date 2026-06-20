@@ -1,26 +1,111 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --color-cream: #FAF7F2;
+  --color-parchment: #F0E9D8;
+  --color-walnut: #1C1208;
+  --color-walnut-mid: #3A2810;
+  --color-gold: #B8942A;
+  --color-gold-light: #D4AE4A;
+  --color-gold-pale: #F0E4BE;
+  --color-stone: #8B7B65;
+  --color-stone-light: #C4B49A;
+  --color-border: #D9CCB5;
+  --color-terracotta: #7A3B2E;
+  
+  --font-serif: var(--font-cormorant), Georgia, serif;
+  --font-sans: var(--font-jost), 'Helvetica Neue', sans-serif;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  --spacing-nav: 72px;
+
+  --animate-fade-up: fadeUp 0.75s ease both;
+  --animate-fade-in: fadeIn 1s ease both;
+  --animate-scale-in: scaleIn 0.7s ease both;
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes scaleIn {
+    from { opacity: 0; transform: scale(0.96); }
+    to { opacity: 1; transform: scale(1); }
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer base {
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    @apply bg-cream text-walnut font-sans text-base leading-relaxed antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-serif font-medium leading-tight tracking-tight text-walnut;
+  }
+
+  p {
+    @apply font-sans leading-relaxed text-walnut-mid;
+  }
+
+  /* Form Inputs (Canvas Weekly inspired) */
+  input, textarea, select {
+    @apply w-full bg-transparent border-b border-border py-2.5 font-sans text-[0.95rem] text-walnut outline-none transition-colors duration-200 resize-none;
+  }
+
+  input:focus, textarea:focus, select:focus {
+    @apply border-gold;
+  }
+
+  input::placeholder, textarea::placeholder {
+    @apply text-stone-light;
+  }
+}
+
+@layer utilities {
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 clamp(1.25rem, 4vw, 3rem);
+  }
+  
+  .container-narrow {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 clamp(1.25rem, 4vw, 3rem);
+  }
+
+  .section {
+    padding: clamp(4rem, 8vw, 8rem) 0;
+  }
+
+  .section-sm {
+    padding: clamp(3rem, 6vw, 6rem) 0;
+  }
+
+  .delay-150ms { animation-delay: 0.15s; }
+  .delay-300ms { animation-delay: 0.3s; }
+  .delay-450ms { animation-delay: 0.45s; }
+  .delay-600ms { animation-delay: 0.6s; }
 }
