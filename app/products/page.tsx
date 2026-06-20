@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { products, categoryLabels, type ProductCategory } from "../lib/products";
 import ProductCard from "../components/ProductCard";
@@ -14,7 +14,7 @@ const ALL_CATEGORIES: { value: ProductCategory; label: string }[] = [
   { value: "gemstone", label: "Gemstone Pieces" },
 ];
 
-export default function ProductsPage() {
+function ProductsContent() {
   const searchParams = useSearchParams();
   const initialCat = (searchParams.get("category") as ProductCategory) || "all";
   const [active, setActive] = useState<ProductCategory>(initialCat);
@@ -31,19 +31,6 @@ export default function ProductsPage() {
 
   return (
     <>
-      {/* Page header */}
-      <section className="bg-walnut pt-[calc(var(--spacing-nav)+4rem)] pb-16">
-        <div className="container text-center">
-          <span className="block font-sans text-[0.7rem] font-semibold tracking-[0.2em] uppercase text-gold mb-4">
-            Handcrafted in Patan, Nepal
-          </span>
-          <h1 className="font-serif font-normal text-[clamp(2.5rem,5vw,4rem)] text-cream leading-[1.1]">
-            The Collection
-          </h1>
-          <div className="w-12 h-0.5 bg-gold mx-auto mt-6" />
-        </div>
-      </section>
-
       {/* Filter pills */}
       <div className="bg-cream border-b border-border sticky top-[var(--spacing-nav)] z-40">
         <div className="container flex gap-2 overflow-x-auto py-5 scrollbar-hide">
@@ -85,6 +72,33 @@ export default function ProductsPage() {
           )}
         </div>
       </section>
+    </>
+  );
+}
+
+export default function ProductsPage() {
+  return (
+    <>
+      {/* Page header */}
+      <section className="bg-walnut pt-[calc(var(--spacing-nav)+4rem)] pb-16">
+        <div className="container text-center">
+          <span className="block font-sans text-[0.7rem] font-semibold tracking-[0.2em] uppercase text-gold mb-4">
+            Handcrafted in Patan, Nepal
+          </span>
+          <h1 className="font-serif font-normal text-[clamp(2.5rem,5vw,4rem)] text-cream leading-[1.1]">
+            The Collection
+          </h1>
+          <div className="w-12 h-0.5 bg-gold mx-auto mt-6" />
+        </div>
+      </section>
+
+      <Suspense fallback={
+        <div className="container py-16 text-center text-stone">
+          <p className="font-sans text-[0.7rem] font-semibold tracking-[0.2em] uppercase">Loading pieces...</p>
+        </div>
+      }>
+        <ProductsContent />
+      </Suspense>
 
       <InquiryBanner variant="gold" />
     </>
