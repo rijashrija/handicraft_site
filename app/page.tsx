@@ -1,11 +1,16 @@
 import Image from "next/image";
 import Link from "next/link";
-import { getFeaturedProducts } from "./lib/products";
+import { getProducts, getHome, getCategories } from "./lib/api";
 import ProductSlider from "./components/ProductSlider";
 import InquiryBanner from "./components/InquiryBanner";
 
-export default function HomePage() {
-  const featured = getFeaturedProducts();
+export default async function HomePage() {
+  const [featured, homeData, categories] = await Promise.all([
+    getProducts(undefined, true),
+    getHome(),
+    getCategories(),
+  ]);
+  const { hero, heritage, process } = homeData;
 
   return (
     <>
@@ -13,7 +18,7 @@ export default function HomePage() {
       <section className="relative h-[100svh] min-h-[600px] flex items-end overflow-hidden">
         {/* Background image */}
         <Image
-          src="/images/hero-bg.jpg"
+          src={hero.backgroundImage}
           alt="Exquisite silver handicrafts display"
           fill
           priority
@@ -26,33 +31,31 @@ export default function HomePage() {
         {/* Content */}
         <div className="container relative pb-[clamp(3rem,8vh,6rem)] pt-[var(--spacing-nav)]">
           <span className="block font-sans text-[0.7rem] font-semibold tracking-[0.2em] uppercase text-gold mb-5 animate-fade-up">
-            Master Craftsmanship · Patan, Nepal
+            {hero.tagline}
           </span>
           <h1 className="font-serif font-light text-[clamp(3rem,7vw,6.5rem)] text-cream max-w-[800px] leading-[1.05] tracking-[-0.02em] mb-6 animate-fade-up delay-150ms">
-            Where Silver Speaks
+            {hero.heading1}
             <br />
-            <em className="text-gold-light">of Devotion</em>
+            <em className="text-gold-light">{hero.heading2}</em>
           </h1>
           <p className="text-cream/70 max-w-[480px] text-[1.05rem] leading-[1.75] mb-10 animate-fade-up delay-300ms">
-            Handcrafted silver deity statues, gemstone necklaces, and ceremonial 
-            artifacts — each piece a living bridge between ancient tradition and 
-            enduring beauty.
+            {hero.body}
           </p>
           <div className="flex flex-wrap gap-4 animate-fade-up delay-450ms">
             <Link
-              href="/products"
+              href={hero.ctaPrimary.href}
               className="inline-flex items-center gap-2 px-9 py-3.5 bg-gold text-walnut font-sans text-[0.8rem] font-bold tracking-[0.12em] uppercase border border-gold hover:bg-gold-light hover:border-gold-light transition-colors duration-250"
             >
-              View Collection
+              {hero.ctaPrimary.label}
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M5 12h14M12 5l7 7-7 7" />
               </svg>
             </Link>
             <Link
-              href="/contact"
+              href={hero.ctaSecondary.href}
               className="inline-flex items-center gap-2 px-9 py-3.5 bg-transparent text-cream font-sans text-[0.8rem] font-semibold tracking-[0.12em] uppercase border border-white/50 hover:bg-white/10 hover:border-gold-light hover:text-gold-light transition-colors duration-250"
             >
-              Inquire Now
+              {hero.ctaSecondary.label}
             </Link>
           </div>
         </div>
@@ -80,32 +83,10 @@ export default function HomePage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-0.5">
-            {[
-              {
-                href: "/products?category=silver-idols",
-                image: "/images/category-statues.jpg",
-                label: "Silver Idols",
-                title: "Deity Statues",
-                desc: "Hand-carved silver icons of the divine — Ganesha, Lakshmi, Durga, Buddha — in 92.5 and fine silver.",
-              },
-              {
-                href: "/products?category=necklaces",
-                image: "/images/category-necklace.jpg",
-                label: "Necklaces",
-                title: "Gemstone Jewellery",
-                desc: "Gold-plated sterling silver necklaces adorned with lapis lazuli, coral, turquoise, and pearl.",
-              },
-              {
-                href: "/products?category=artifacts",
-                image: "/images/category-artifacts.jpg",
-                label: "Artifacts",
-                title: "Cultural Artifacts",
-                desc: "Ceremonial bowls, incense holders, filigree boxes — expressions of Himalayan metalwork tradition.",
-              },
-            ].map((cat) => (
+            {categories.map((cat: any) => (
               <Link
-                key={cat.href}
-                href={cat.href}
+                key={cat.slug}
+                href={`/products?category=${cat.slug}`}
                 className="group block overflow-hidden"
               >
                 <div className="relative aspect-[3/4] overflow-hidden">
@@ -125,7 +106,7 @@ export default function HomePage() {
                       {cat.title}
                     </h3>
                     <p className="text-sm text-cream/65 leading-relaxed mb-5">
-                      {cat.desc}
+                      {cat.description}
                     </p>
                     <span className="font-sans text-[0.7rem] font-semibold tracking-[0.15em] uppercase text-gold-light">
                       Explore →
@@ -149,8 +130,8 @@ export default function HomePage() {
             <div className="relative">
               <div className="relative aspect-[4/5] overflow-hidden">
                 <Image
-                  src="/images/category-statues.jpg"
-                  alt="Master artisan at work in Patan workshop"
+                  src={heritage.image}
+                  alt={heritage.imageAlt}
                   fill
                   sizes="(max-width: 768px) 100vw, 50vw"
                   className="object-cover"
@@ -163,32 +144,20 @@ export default function HomePage() {
             {/* Text side */}
             <div>
               <span className="block font-sans text-[0.7rem] font-semibold tracking-[0.2em] uppercase text-stone mb-4">
-                Our Heritage
+                {heritage.eyebrow}
               </span>
               <h2 className="font-serif font-normal text-[clamp(2rem,3.5vw,3rem)] leading-[1.1] mb-6">
-                Forged in Tradition,
+                {heritage.heading1}
                 <br />
-                <em className="text-gold">Worn by the World</em>
+                <em className="text-gold">{heritage.heading2}</em>
               </h2>
               <span className="block w-12 h-0.5 bg-gold mb-6" />
-              <p className="text-[0.95rem] mb-6">
-                For over thirty-five years, master artisan Ram Prasad Sharma has 
-                maintained the ancient repoussé and filigree traditions of Patan — 
-                one of the world's oldest centres of metalworking excellence.
-              </p>
-              <p className="text-[0.95rem] mb-8">
-                Our pieces travel from this storied valley to collections in Europe, 
-                North America, and Southeast Asia, carrying with them the spiritual 
-                weight and aesthetic mastery of a living craft tradition.
-              </p>
+              <p className="text-[0.95rem] mb-6">{heritage.body1}</p>
+              <p className="text-[0.95rem] mb-8">{heritage.body2}</p>
 
               {/* Stats */}
               <div className="grid grid-cols-3 gap-6 pt-8 border-t border-border">
-                {[
-                  { num: "35+", label: "Years of craft" },
-                  { num: "50+", label: "Countries served" },
-                  { num: "1987", label: "Founded in Patan" },
-                ].map((stat) => (
+                {heritage.stats.map((stat) => (
                   <div key={stat.label}>
                     <div className="font-serif font-normal text-3xl text-gold leading-none">
                       {stat.num}
@@ -201,10 +170,10 @@ export default function HomePage() {
               </div>
 
               <Link
-                href="/about"
+                href={heritage.cta.href}
                 className="inline-flex items-center gap-2 px-9 py-3.5 bg-walnut text-gold-pale font-sans text-[0.8rem] font-semibold tracking-[0.12em] uppercase border border-walnut hover:bg-gold hover:border-gold hover:text-walnut transition-colors duration-250 mt-10"
               >
-                Read Our Story
+                {heritage.cta.label}
               </Link>
             </div>
           </div>
@@ -215,12 +184,7 @@ export default function HomePage() {
       <section className="section-sm bg-walnut overflow-hidden">
         <div className="container">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-0 border-t border-l border-white/5">
-            {[
-              { num: "01", title: "Pure Materials", desc: "92.5 sterling silver and 999 fine silver, sourced responsibly from certified suppliers." },
-              { num: "02", title: "Hand-Crafted", desc: "Every piece shaped, carved, and finished entirely by hand using traditional tools and techniques." },
-              { num: "03", title: "Precious Stones", desc: "Naturally sourced lapis lazuli, coral, turquoise, ruby, and sapphire, individually selected." },
-              { num: "04", title: "International Delivery", desc: "Insured worldwide shipping with discreet, custom packaging to preserve each piece in transit." },
-            ].map((step) => (
+            {process.map((step) => (
               <div
                 key={step.num}
                 className="p-10 border-r border-b border-white/5"

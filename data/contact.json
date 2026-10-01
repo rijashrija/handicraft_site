@@ -1,0 +1,17 @@
+{
+  "heading": "Bespoke Inquiries and Custom Orders",
+  "subheading": "Get in Touch",
+  "intro": "We work with clients globally, offering insured shipping for all our handcrafted pieces. Reach out to discuss availability, pricing, or commissioned works.",
+  "location": {
+    "street": "Mangalbazar, Patan",
+    "city": "Lalitpur, Nepal"
+  },
+  "email": "info@aryasilverarts.com",
+  "phone": "+977 980 123 4567",
+  "phoneHref": "tel:+9779801234567",
+  "socials": [
+    { "label": "Instagram", "href": "#" },
+    { "label": "Facebook", "href": "#" },
+    { "label": "WhatsApp", "href": "#" }
+  ]
+}

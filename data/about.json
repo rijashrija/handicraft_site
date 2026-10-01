@@ -1,0 +1,50 @@
+{
+  "mission": "To preserve the ancient metalworking heritage of Patan, translating spiritual devotion into enduring silver treasures for the modern world.",
+  "artisan": {
+    "name": "Rajendra Bajracharya",
+    "image": "/images/category-statues.jpg",
+    "bio1": "Born into a family of traditional silversmiths in the heart of Patan, Ram Prasad Sharma began his apprenticeship at the age of twelve. Under the strict tutelage of his father, he learned the rigorous disciplines of repoussé and filigree - techniques that have defined Newari metalwork since the Licchavi period.",
+    "bio2": "Today, with over 35 years of experience, he is recognised as one of the few remaining master craftsmen capable of executing large-scale deity statues with absolute iconographic precision. His hands carry the knowledge of centuries, coaxing divine forms from cold metal with patience, reverence, and extraordinary skill."
+  },
+  "values": [
+    {
+      "title": "Ancient Traditions",
+      "desc": "We do not compromise on technique. Every piece is crafted using the same hand-tools and methods employed by the artisans of the royal courts centuries ago. We believe the energy of the maker remains in the object."
+    },
+    {
+      "title": "Precious Materials",
+      "desc": "We source only 92.5 sterling silver and 999 fine silver. Our gemstones - from Tibetan turquoise to deep lapis lazuli - are individually selected for their character, colour, and spiritual resonance."
+    },
+    {
+      "title": "Handcrafted Excellence",
+      "desc": "In an era of mass production, we offer the luxury of time. A single deity statue may take months to complete. This dedication to excellence ensures each piece is a unique heirloom, built to last generations."
+    }
+  ],
+  "process": [
+    {
+      "step": "01",
+      "title": "Conceptualisation and Wax Modelling",
+      "desc": "For complex deity figures, the process begins with a precise sketch following traditional iconographic proportions. A master model is then meticulously carved in beeswax, capturing every nuance of expression and posture."
+    },
+    {
+      "step": "02",
+      "title": "Casting and Repoussé",
+      "desc": "Depending on the piece, the silver is either cast using the ancient lost-wax method or hammered into shape using repoussé. Repoussé involves working the silver sheet from the reverse side to create relief designs - a technique demanding extraordinary spatial awareness."
+    },
+    {
+      "step": "03",
+      "title": "Chasing and Engraving",
+      "desc": "Once the basic form is established, the artisan uses fine steel tools to chase and engrave intricate details: the folds of a robe, the pattern of a crown, the serene curve of an eye."
+    },
+    {
+      "step": "04",
+      "title": "Stone Setting and Gilding",
+      "desc": "Precious stones are set by hand. For select pieces, 24K gold is applied to specific areas using traditional fire gilding or modern electroplating, creating a striking contrast with the silver."
+    },
+    {
+      "step": "05",
+      "title": "Polishing and Consecration",
+      "desc": "The final piece is polished to a high luster or treated to achieve an antique oxidised finish. In local tradition, the finished idol is then ready to be awakened through consecration rituals."
+    }
+  ]
+}

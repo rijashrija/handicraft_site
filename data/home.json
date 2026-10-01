@@ -1,0 +1,55 @@
+{
+  "hero": {
+    "tagline": "Master Craftsmanship - Patan, Nepal",
+    "heading1": "Where Silver Speaks",
+    "heading2": "of Devotion",
+    "body": "Handcrafted silver deity statues, gemstone necklaces, and ceremonial artifacts - each piece a living bridge between ancient tradition and enduring beauty.",
+    "ctaPrimary": { "label": "View Collection", "href": "/products" },
+    "ctaSecondary": { "label": "Inquire Now", "href": "/contact" },
+    "backgroundImage": "/images/hero-bg.jpg"
+  },
+  "categories": [
+    {
+      "href": "/products?category=silver-idols",
+      "image": "/images/category-statues.jpg",
+      "label": "Silver Idols",
+      "title": "Deity Statues",
+      "desc": "Hand-carved silver icons of the divine - Ganesha, Lakshmi, Durga, Buddha - in 92.5 and fine silver."
+    },
+    {
+      "href": "/products?category=necklaces",
+      "image": "/images/category-necklace.jpg",
+      "label": "Necklaces",
+      "title": "Gemstone Jewellery",
+      "desc": "Gold-plated sterling silver necklaces adorned with lapis lazuli, coral, turquoise, and pearl."
+    },
+    {
+      "href": "/products?category=artifacts",
+      "image": "/images/category-artifacts.jpg",
+      "label": "Artifacts",
+      "title": "Cultural Artifacts",
+      "desc": "Ceremonial bowls, incense holders, filigree boxes - expressions of Himalayan metalwork tradition."
+    }
+  ],
+  "heritage": {
+    "image": "/images/category-statues.jpg",
+    "imageAlt": "Master artisan at work in Patan workshop",
+    "eyebrow": "Our Heritage",
+    "heading1": "Forged in Tradition,",
+    "heading2": "Worn by the World",
+    "body1": "For over thirty-five years, master artisan Ram Prasad Sharma has maintained the ancient repoussé and filigree traditions of Patan - one of the world's oldest centres of metalworking excellence.",
+    "body2": "Our pieces travel from this storied valley to collections in Europe, North America, and Southeast Asia, carrying with them the spiritual weight and aesthetic mastery of a living craft tradition.",
+    "stats": [
+      { "num": "35+", "label": "Years of craft" },
+      { "num": "50+", "label": "Countries served" },
+      { "num": "1987", "label": "Founded in Patan" }
+    ],
+    "cta": { "label": "Read Our Story", "href": "/about" }
+  },
+  "process": [
+    { "num": "01", "title": "Pure Materials", "desc": "92.5 sterling silver and 999 fine silver, sourced responsibly from certified suppliers." },
+    { "num": "02", "title": "Hand-Crafted", "desc": "Every piece shaped, carved, and finished entirely by hand using traditional tools and techniques." },
+    { "num": "03", "title": "Precious Stones", "desc": "Naturally sourced lapis lazuli, coral, turquoise, ruby, and sapphire, individually selected." },
+    { "num": "04", "title": "International Delivery", "desc": "Insured worldwide shipping with discreet, custom packaging to preserve each piece in transit." }
+  ]
+}

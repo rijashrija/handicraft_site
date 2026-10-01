@@ -1,82 +1,15 @@
-"use client";
-
-import { useState, useEffect, Suspense } from "react";
-import { useSearchParams } from "next/navigation";
-import { products, categoryLabels, type ProductCategory } from "../lib/products";
-import ProductCard from "../components/ProductCard";
+import { Suspense } from "react";
+import { getProducts, getCategories } from "../lib/api";
+import ProductsContent from "./ProductsContent";
 import InquiryBanner from "../components/InquiryBanner";
 
-const ALL_CATEGORIES: { value: ProductCategory; label: string }[] = [
-  { value: "all", label: "All Pieces" },
-  { value: "silver-idols", label: "Silver Idols" },
-  { value: "necklaces", label: "Necklaces" },
-  { value: "artifacts", label: "Cultural Artifacts" },
-  { value: "gemstone", label: "Gemstone Pieces" },
-];
+// ── Server Component — fetches data then passes it to the client ───
+export default async function ProductsPage() {
+  const [products, categories] = await Promise.all([
+    getProducts(),
+    getCategories(),
+  ]);
 
-function ProductsContent() {
-  const searchParams = useSearchParams();
-  const initialCat = (searchParams.get("category") as ProductCategory) || "all";
-  const [active, setActive] = useState<ProductCategory>(initialCat);
-
-  const filtered =
-    active === "all"
-      ? products
-      : products.filter((p) => p.category === active);
-
-  useEffect(() => {
-    const cat = (searchParams.get("category") as ProductCategory) || "all";
-    setActive(cat);
-  }, [searchParams]);
-
-  return (
-    <>
-      {/* Filter pills */}
-      <div className="bg-cream border-b border-border sticky top-[var(--spacing-nav)] z-40">
-        <div className="container flex gap-2 overflow-x-auto py-5 scrollbar-hide">
-          {ALL_CATEGORIES.map((cat) => (
-            <button
-              key={cat.value}
-              id={`filter-${cat.value}`}
-              onClick={() => setActive(cat.value)}
-              className={`shrink-0 px-5 py-2 font-sans text-[0.7rem] font-semibold tracking-[0.12em] uppercase border transition-all duration-200 whitespace-nowrap ${
-                active === cat.value
-                  ? "bg-walnut text-gold-pale border-walnut"
-                  : "bg-transparent text-stone border-border hover:border-walnut hover:text-walnut"
-              }`}
-            >
-              {cat.label}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Product grid */}
-      <section className="section bg-cream">
-        <div className="container">
-          <p className="font-sans text-[0.7rem] font-semibold tracking-[0.2em] uppercase text-stone mb-10">
-            {filtered.length} {filtered.length === 1 ? "piece" : "pieces"}{" "}
-            {active !== "all" && `in ${categoryLabels[active as Exclude<ProductCategory, "all">]}`}
-          </p>
-
-          {filtered.length === 0 ? (
-            <div className="text-center py-16 text-stone">
-              <p>No pieces found in this category.</p>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 gap-y-12">
-              {filtered.map((product) => (
-                <ProductCard key={product.slug} product={product} />
-              ))}
-            </div>
-          )}
-        </div>
-      </section>
-    </>
-  );
-}
-
-export default function ProductsPage() {
   return (
     <>
       {/* Page header */}
@@ -92,15 +25,19 @@ export default function ProductsPage() {
         </div>
       </section>
 
-      <Suspense fallback={
-        <div className="container py-16 text-center text-stone">
-          <p className="font-sans text-[0.7rem] font-semibold tracking-[0.2em] uppercase">Loading pieces...</p>
-        </div>
-      }>
-        <ProductsContent />
+      <Suspense
+        fallback={
+          <div className="container py-16 text-center text-stone">
+            <p className="font-sans text-[0.7rem] font-semibold tracking-[0.2em] uppercase">
+              Loading pieces...
+            </p>
+          </div>
+        }
+      >
+        <ProductsContent products={products} categories={categories} />
       </Suspense>
 
-      <InquiryBanner variant="gold" />
+      <InquiryBanner />
     </>
   );
 }

@@ -2,6 +2,7 @@
 
 import { useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
+import contactData from "../../data/contact.json";
 
 function ContactForm() {
   const searchParams = useSearchParams();
@@ -83,7 +84,12 @@ function ContactForm() {
   );
 }
 
-export default function ContactPage() {
+import { getContact } from "../lib/api";
+
+export default async function ContactPage() {
+  const contactData = await getContact();
+  const { heading, subheading, intro, location, email, phone, phoneHref, socials } = contactData;
+
   return (
     <>
       <div className="h-[var(--spacing-nav)] bg-cream" />
@@ -91,9 +97,9 @@ export default function ContactPage() {
       <section className="section bg-cream">
         <div className="container">
           <div className="text-center mb-16">
-            <span className="block font-sans text-[0.7rem] font-semibold tracking-[0.2em] uppercase text-gold mb-4">Get in Touch</span>
+            <span className="block font-sans text-[0.7rem] font-semibold tracking-[0.2em] uppercase text-gold mb-4">{subheading}</span>
             <h1 className="font-serif font-normal text-[clamp(2.5rem,5vw,4rem)] leading-[1.1]">
-              Bespoke Inquiries &<br />Custom Orders
+              {heading}
             </h1>
           </div>
 
@@ -112,7 +118,7 @@ export default function ContactPage() {
               <div>
                 <h2 className="font-serif text-2xl text-gold-pale mb-6">Contact Information</h2>
                 <p className="text-white/70 text-[0.95rem] leading-relaxed mb-8">
-                  We work with clients globally, offering insured shipping for all our handcrafted pieces. Reach out to discuss availability, pricing, or commissioned works.
+                  {intro}
                 </p>
               </div>
 
@@ -120,27 +126,27 @@ export default function ContactPage() {
                 <div>
                   <div className="text-[0.65rem] tracking-[0.1em] uppercase text-gold mb-1.5">Studio Location</div>
                   <p className="text-white/80 text-[0.95rem] leading-relaxed">
-                    Mangalbazar, Patan<br />
-                    Lalitpur, Nepal
+                    {location.street}<br />
+                    {location.city}
                   </p>
                 </div>
                 
                 <div>
                   <div className="text-[0.65rem] tracking-[0.1em] uppercase text-gold mb-1.5">Direct Contact</div>
-                  <a href="mailto:info@aryasilverarts.com" className="block text-white/80 text-[0.95rem] hover:text-gold transition-colors mb-1.5">
-                    info@aryasilverarts.com
+                  <a href={`mailto:${email}`} className="block text-white/80 text-[0.95rem] hover:text-gold transition-colors mb-1.5">
+                    {email}
                   </a>
-                  <a href="tel:+9779801234567" className="block text-white/80 text-[0.95rem] hover:text-gold transition-colors">
-                    +977 980 123 4567
+                  <a href={phoneHref} className="block text-white/80 text-[0.95rem] hover:text-gold transition-colors">
+                    {phone}
                   </a>
                 </div>
 
                 <div>
                   <div className="text-[0.65rem] tracking-[0.1em] uppercase text-gold mb-3">Social Media</div>
                   <div className="flex gap-4">
-                    {["Instagram", "Facebook", "WhatsApp"].map((social) => (
-                      <a key={social} href="#" className="text-[0.85rem] text-white/60 hover:text-gold transition-colors">
-                        {social}
+                    {socials.map((social) => (
+                      <a key={social.label} href={social.href} className="text-[0.85rem] text-white/60 hover:text-gold transition-colors">
+                        {social.label}
                       </a>
                     ))}
                   </div>
