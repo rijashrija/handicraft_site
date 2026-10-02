@@ -1,6 +1,20 @@
 import Link from "next/link";
+import { getContact } from "../lib/api";
+import defaultContactData from "../../data/contact.json";
 
-export default function Footer() {
+export default async function Footer() {
+  let contact = defaultContactData;
+  try {
+    const data = await getContact();
+    if (data && data.email) {
+      contact = data;
+    }
+  } catch (err) {
+    // fallback to static JSON
+  }
+
+  const { location, email, phone, phoneHref, socials } = contact;
+
   return (
     <footer className="bg-walnut text-cream pt-20 pb-10">
       <div className="container">
@@ -78,45 +92,43 @@ export default function Footer() {
               <div>
                 <div className="text-[0.65rem] tracking-[0.1em] uppercase text-white/35 mb-1">Location</div>
                 <p className="text-white/60 text-sm leading-relaxed">
-                  Mangalbazar, Patan<br />
-                  Lalitpur, Nepal
+                  {location?.street}<br />
+                  {location?.city}
                 </p>
               </div>
               <div>
                 <div className="text-[0.65rem] tracking-[0.1em] uppercase text-white/35 mb-1">Email</div>
                 <a
-                  href="mailto:info@aryasilverarts.com"
+                  href={`mailto:${email}`}
                   className="text-gold-light text-sm hover:underline"
                 >
-                  info@aryasilverarts.com
+                  {email}
                 </a>
               </div>
               <div>
                 <div className="text-[0.65rem] tracking-[0.1em] uppercase text-white/35 mb-1">Phone / WhatsApp</div>
                 <a
-                  href="tel:+9779801234567"
+                  href={phoneHref || `tel:${phone}`}
                   className="text-white/60 text-sm hover:text-gold-light transition-colors"
                 >
-                  +977 980 123 4567
+                  {phone}
                 </a>
               </div>
             </div>
 
             {/* Social icons */}
             <div className="flex gap-4 mt-6">
-              {[
-                { label: "Instagram", href: "#", icon: "IG" },
-                { label: "Facebook", href: "#", icon: "FB" },
-                { label: "WhatsApp", href: "#", icon: "WA" },
-              ].map((s) => (
+              {socials?.map((s: { label: string; href: string }) => (
                 <a
                   key={s.label}
                   href={s.href}
                   aria-label={s.label}
                   title={s.label}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="w-8 h-8 border border-white/20 flex items-center justify-center text-[0.55rem] font-bold tracking-[0.05em] text-white/50 hover:border-gold hover:text-gold transition-colors duration-200"
                 >
-                  {s.icon}
+                  {s.label.slice(0, 2).toUpperCase()}
                 </a>
               ))}
             </div>

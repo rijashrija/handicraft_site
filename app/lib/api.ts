@@ -7,10 +7,12 @@ export async function getAbout() {
     return res.json()
 }
 
-export async function getProducts(category?: string) {
-    const url = category
-        ? `${API_URL}/api/v1/products?category=${category}`
-        : `${API_URL}/api/v1/products`
+export async function getProducts(category?: string, featured?: boolean) {
+    const params = new URLSearchParams()
+    if (category) params.append('category', category)
+    if (featured !== undefined) params.append('featured', String(featured))
+    const queryString = params.toString()
+    const url = `${API_URL}/api/v1/products${queryString ? `?${queryString}` : ''}`
     const res = await fetch(url, { cache: 'no-store' })
     if (!res.ok) throw new Error('Failed to fetch products')
     return res.json()
