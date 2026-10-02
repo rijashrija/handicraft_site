@@ -3,13 +3,26 @@ import Link from "next/link";
 import { getProducts, getHome, getCategories } from "./lib/api";
 import ProductSlider from "./components/ProductSlider";
 import InquiryBanner from "./components/InquiryBanner";
+import defaultHomeData from "../data/home.json";
 
 export default async function HomePage() {
-  const [featured, homeData, categories] = await Promise.all([
-    getProducts(undefined, true),
-    getHome(),
-    getCategories(),
-  ]);
+  let featured: any[] = [];
+  let homeData: any = defaultHomeData;
+  let categories: any[] = [];
+
+  try {
+    const [featuredRes, homeRes, categoriesRes] = await Promise.all([
+      getProducts(undefined, true),
+      getHome(),
+      getCategories(),
+    ]);
+    featured = featuredRes ?? [];
+    if (homeRes && homeRes.hero) homeData = homeRes;
+    categories = categoriesRes ?? [];
+  } catch (err) {
+    console.warn("Using fallback data — backend unreachable:", err);
+  }
+
   const { hero, heritage, process } = homeData;
 
   return (

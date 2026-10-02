@@ -5,10 +5,19 @@ import InquiryBanner from "../components/InquiryBanner";
 
 // ── Server Component — fetches data then passes it to the client ───
 export default async function ProductsPage() {
-  const [products, categories] = await Promise.all([
-    getProducts(),
-    getCategories(),
-  ]);
+  let products: any[] = [];
+  let categories: any[] = [];
+
+  try {
+    const [productsRes, categoriesRes] = await Promise.all([
+      getProducts(),
+      getCategories(),
+    ]);
+    products = productsRes ?? [];
+    categories = categoriesRes ?? [];
+  } catch (err) {
+    console.warn("Using empty fallback — backend unreachable:", err);
+  }
 
   return (
     <>

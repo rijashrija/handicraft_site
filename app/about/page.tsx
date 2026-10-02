@@ -1,10 +1,17 @@
 import Image from "next/image";
 import InquiryBanner from "../components/InquiryBanner";
 import ProcessAccordion from "../components/ProcessAccordion";
-// import aboutData from "../../data/about.json";
+import defaultAboutData from "../../data/about.json";
 import { getAbout } from '../lib/api'
+
 export default async function AboutPage() {
-  const aboutData = await getAbout()
+  let aboutData: any = defaultAboutData;
+  try {
+    const data = await getAbout();
+    if (data && data.mission) aboutData = data;
+  } catch (err) {
+    console.warn("Using fallback about data:", err);
+  }
   const { mission, artisan, values, process } = aboutData;
 
   return (
