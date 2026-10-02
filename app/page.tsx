@@ -157,7 +157,7 @@ export default async function HomePage() {
 
               {/* Stats */}
               <div className="grid grid-cols-3 gap-6 pt-8 border-t border-border">
-                {heritage.stats.map((stat) => (
+                {heritage.stats.map((stat: { num: string; label: string }) => (
                   <div key={stat.label}>
                     <div className="font-serif font-normal text-3xl text-gold leading-none">
                       {stat.num}
@@ -184,7 +184,7 @@ export default async function HomePage() {
       <section className="section-sm bg-walnut overflow-hidden">
         <div className="container">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-0 border-t border-l border-white/5">
-            {process.map((step) => (
+            {process.map((step: { num: string; title: string; desc: string }) => (
               <div
                 key={step.num}
                 className="p-10 border-r border-b border-white/5"

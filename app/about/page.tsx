@@ -69,7 +69,7 @@ export default async function AboutPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-            {values.map((value, i) => (
+            {values.map((value: { title: string; desc: string }, i: number) => (
               <div key={i} className="text-center p-8 bg-parchment border border-border">
                 <div className="w-10 h-10 rounded-full bg-gold text-walnut flex items-center justify-center font-serif text-xl mx-auto mb-6">
                   {i + 1}
