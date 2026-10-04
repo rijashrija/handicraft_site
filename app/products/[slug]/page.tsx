@@ -1,10 +1,9 @@
 import Image from "next/image";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getProductBySlug, getRelatedProducts, products } from "../../lib/products";
 import ProductCard from "../../components/ProductCard";
 import InquiryBanner from "../../components/InquiryBanner";
-
+import Link from 'next/link'
 export async function generateStaticParams() {
   return products.map((p) => ({ slug: p.slug }));
 }
@@ -20,7 +19,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
   const { slug } = await params;
   const product = getProductBySlug(slug);
   if (!product) notFound();
-  const related = getRelatedProducts(slug, product.category, 3);
+  const related = getRelatedProducts(slug, product.category, 20);
 
   const specs = [
     { key: "Material", val: product.material },
@@ -89,15 +88,20 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
               {/* Inquiry CTA */}
               <div className="bg-gold-pale border border-gold p-6 mb-6">
                 <p className="text-[0.85rem] text-walnut-mid leading-relaxed mb-4">
-                  Contact us for pricing, availability, and bespoke customisation. We ship worldwide with full insurance.
+                  Contact us directly on WhatsApp for pricing, availability, and bespoke customisation. We ship worldwide with full insurance.
                 </p>
-                <Link
-                  href={`/contact?product=${encodeURIComponent(product.name)}`}
-                  className="w-full inline-flex justify-center items-center gap-2 px-9 py-3.5 bg-walnut text-gold-pale font-sans text-[0.8rem] font-semibold tracking-[0.12em] uppercase border border-walnut hover:bg-gold hover:border-gold hover:text-walnut transition-colors duration-250"
+                <a
+                  href={`https://wa.me/9845510022?text=${encodeURIComponent(`Hi, I'm interested in *${product.name}*. Could you please share more details about pricing and availability?`)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full inline-flex justify-center items-center gap-2 px-9 py-3.5 bg-[#25D366] text-white font-sans text-[0.8rem] font-semibold tracking-[0.12em] uppercase border border-[#25D366] hover:bg-[#1ebe5d] hover:border-[#1ebe5d] transition-colors duration-250"
                 >
-                  Inquire About This Piece
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
-                </Link>
+                  {/* WhatsApp icon */}
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z" />
+                  </svg>
+                  Inquire on WhatsApp
+                </a>
               </div>
 
               {/* Trust badges */}
@@ -114,36 +118,21 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
         </div>
       </section>
 
-      {/* Description + Cultural note */}
-      <section className="section bg-parchment border-t border-border">
-        <div className="container-narrow">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-[clamp(2rem,5vw,5rem)]">
-            <div>
-              <span className="block font-sans text-[0.7rem] font-semibold tracking-[0.2em] uppercase text-stone mb-4">About This Piece</span>
-              <p className="text-[0.95rem] leading-relaxed">{product.description}</p>
-            </div>
-            <div>
-              <span className="block font-sans text-[0.7rem] font-semibold tracking-[0.2em] uppercase text-stone mb-4">Cultural Significance</span>
-              <blockquote className="border-l-3 border-gold pl-6 m-0">
-                <p className="font-serif text-[1.05rem] italic leading-relaxed text-walnut-mid">
-                  {product.culturalNote}
-                </p>
-              </blockquote>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Related */}
       {related.length > 0 && (
-        <section className="section bg-cream">
+        <section className="section bg-parchment border-t border-border">
           <div className="container">
             <div className="mb-10">
-              <span className="block font-sans text-[0.7rem] font-semibold tracking-[0.2em] uppercase text-stone mb-3">You May Also Like</span>
+              <span className="block font-sans text-[0.7rem] font-semibold tracking-[0.2em] uppercase text-gold mb-3">You May Also Like</span>
               <h2 className="font-serif font-normal text-[clamp(1.5rem,2.5vw,2rem)]">More from {product.categoryLabel}</h2>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              {related.map((p) => <ProductCard key={p.slug} product={p} />)}
+            <div className="flex overflow-x-auto gap-6 pb-6 snap-x snap-mandatory scrollbar-hide">
+              {related.map((p) => (
+                <div key={p.slug} className="snap-start shrink-0 w-[85vw] sm:w-[45vw] lg:w-[30vw]">
+                  <ProductCard product={p} />
+                </div>
+              ))}
             </div>
           </div>
         </section>

@@ -16,15 +16,39 @@ export default function ProductsContent({
 }) {
   const searchParams = useSearchParams();
   const [active, setActive] = useState(searchParams.get("category") || "all");
+  const [visibleCount, setVisibleCount] = useState(9);
 
   useEffect(() => {
     setActive(searchParams.get("category") || "all");
+    setVisibleCount(9);
   }, [searchParams]);
 
   const filtered =
     active === "all"
       ? products
       : products.filter((p) => p.category?.slug?.toLowerCase() === active.toLowerCase());
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && visibleCount < filtered.length) {
+          setVisibleCount((prev) => prev + 9);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    const target = document.getElementById("scroll-anchor");
+    if (target) {
+      observer.observe(target);
+    }
+
+    return () => {
+      if (target) {
+        observer.unobserve(target);
+      }
+    };
+  }, [visibleCount, filtered.length]);
 
   const activeLabel = categories.find((c) => c.slug === active)?.label ?? "";
 
@@ -74,9 +98,15 @@ export default function ProductsContent({
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 gap-y-12">
-              {filtered.map((product) => (
+              {filtered.slice(0, visibleCount).map((product) => (
                 <ProductCard key={product.slug} product={product as any} />
               ))}
+            </div>
+          )}
+          
+          {visibleCount < filtered.length && (
+            <div id="scroll-anchor" className="h-20 mt-8 flex justify-center items-center">
+              <div className="w-6 h-6 border-2 border-gold border-t-transparent rounded-full animate-spin"></div>
             </div>
           )}
         </div>

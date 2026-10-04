@@ -12,19 +12,32 @@ export default async function AboutPage() {
   } catch (err) {
     console.warn("Using fallback about data:", err);
   }
-  const { mission, artisan, values, process } = aboutData;
+  const { mission, artisan, values, process, process_image, process_caption_label, process_caption_desc } = aboutData;
 
   return (
     <>
       <div className="h-[var(--spacing-nav)] bg-cream" />
 
       {/* ── MISSION STATEMENT ──────────────────────────────────── */}
-      <section className="section bg-cream">
-        <div className="container text-center">
+      <section className="relative section overflow-hidden">
+        {/* Background Image */}
+        <Image
+          src="/images/hero-bg.jpg"
+          alt="Artisan workshop background"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-center"
+        />
+        {/* Dark overlay for legibility */}
+        <div className="absolute inset-0 bg-walnut/65" />
+
+        {/* Content */}
+        <div className="relative z-10 container text-center">
           <span className="block font-sans text-[0.7rem] font-semibold tracking-[0.2em] uppercase text-gold mb-6 animate-fade-up">
             Our Mission
           </span>
-          <h1 className="font-serif font-light text-[clamp(2rem,5vw,4.5rem)] leading-[1.15] max-w-[900px] mx-auto animate-fade-up delay-150ms">
+          <h1 className="font-serif font-light text-[clamp(2rem,5vw,4.5rem)] leading-[1.15] max-w-[900px] mx-auto animate-fade-up delay-150ms text-cream">
             {mission}
           </h1>
         </div>
@@ -116,8 +129,8 @@ export default async function AboutPage() {
             <div className="lg:sticky lg:top-[calc(var(--spacing-nav)+2rem)]">
               <div className="relative aspect-[3/4] overflow-hidden">
                 <Image
-                  src="/images/category-statues.jpg"
-                  alt="Master artisan crafting silver at the workshop in Patan"
+                  src={process_image || "/images/category-statues.jpg"}
+                  alt={process_caption_desc || "Master artisan at work"}
                   fill
                   sizes="(max-width: 1024px) 100vw, 420px"
                   className="object-cover"
@@ -127,10 +140,10 @@ export default async function AboutPage() {
                 {/* caption strip */}
                 <div className="absolute bottom-0 left-0 right-0 px-7 py-5 bg-walnut/70 backdrop-blur-sm">
                   <p className="font-sans text-[0.65rem] font-semibold tracking-[0.15em] uppercase text-gold">
-                    Patan Workshop
+                    {process_caption_label || "Patan Workshop"}
                   </p>
                   <p className="font-serif text-sm text-cream/80 mt-1">
-                    Master artisan shaping silver by hand using traditional repoussé tools
+                    {process_caption_desc || "Master artisan shaping silver by hand using traditional repoussé tools"}
                   </p>
                 </div>
               </div>

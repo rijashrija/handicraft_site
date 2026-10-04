@@ -134,10 +134,13 @@ export default function ContactForm() {
       // Show the first error message for this field
       setErrors((prev) => ({
         ...prev,
-        [name]: result.error.errors[0].message,
+        [name]: result.error.issues[0]?.message || "Invalid input",
       }));
     }
   };
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   // ─────────────────────────────────────────────────────────────
   // STEP 7: handleSubmit — validate ALL fields at once on submit
@@ -151,7 +154,7 @@ export default function ContactForm() {
   // We extract the first message for each field and store them
   // in our `errors` state, which then renders under each input.
   // ─────────────────────────────────────────────────────────────
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const result = contactSchema.safeParse(formData);
@@ -172,7 +175,31 @@ export default function ContactForm() {
 
     // All valid! Clear errors and submit
     setErrors({});
-    setTimeout(() => setSubmitted(true), 800);
+    setIsSubmitting(true);
+    setSubmitError(null);
+
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/v1/contact/inquire`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        // If FastAPI returns a 422, we could parse errorData.detail here.
+        throw new Error(errorData.message || "Failed to submit inquiry");
+      }
+
+      // Success! Show the success screen.
+      setSubmitted(true);
+    } catch (err: any) {
+      setSubmitError(err.message || "An unexpected error occurred.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   // ─── Success screen ─────────────────────────────────────────
@@ -311,12 +338,20 @@ export default function ContactForm() {
         )}
       </div>
 
+      {submitError && (
+        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 text-sm">
+          {submitError}
+        </div>
+      )}
+
       <button
         type="submit"
-        className="self-start inline-flex items-center gap-2 px-9 py-3.5 bg-walnut text-gold-pale font-sans text-[0.8rem] font-semibold tracking-[0.12em] uppercase border border-walnut hover:bg-gold hover:border-gold hover:text-walnut transition-colors duration-250"
+        disabled={isSubmitting}
+        className="self-start inline-flex items-center gap-2 px-9 py-3.5 bg-walnut text-gold-pale font-sans text-[0.8rem] font-semibold tracking-[0.12em] uppercase border border-walnut hover:bg-gold hover:border-gold hover:text-walnut transition-colors duration-250 disabled:opacity-50 disabled:cursor-not-allowed"
       >
-        Submit Inquiry
+        {isSubmitting ? "Sending..." : "Submit Inquiry"}
       </button>
     </form>
   );
 }
+
