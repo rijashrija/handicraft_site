@@ -8,7 +8,18 @@ export default async function AboutPage() {
   let aboutData: any = defaultAboutData;
   try {
     const data = await getAbout();
-    if (data && data.mission) aboutData = data;
+    if (data && data.mission) {
+      aboutData = data;
+      // Handle Django flat structure for artisan
+      if (!aboutData.artisan && aboutData.artisan_name) {
+        aboutData.artisan = {
+          name: aboutData.artisan_name,
+          image: aboutData.artisan_image,
+          bio1: aboutData.artisan_bio1,
+          bio2: aboutData.artisan_bio2,
+        };
+      }
+    }
   } catch (err) {
     console.warn("Using fallback about data:", err);
   }
