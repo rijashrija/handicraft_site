@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import ProductCard from "../components/ProductCard";
+import InquiryButtons from "../components/InquiryButtons";
 
 type Category = { slug: string; label: string };
 type Product = {
@@ -145,12 +146,10 @@ export default function ProductsContent({
                 {filtered.length} pieces
                 {visibleCount >= filtered.length ? " — all loaded" : ""}
               </p>
-              <a
-                href="/contact"
-                className="font-sans text-[0.7rem] font-semibold tracking-[0.14em] uppercase text-walnut border border-border px-6 py-2.5 no-underline transition-colors duration-200 hover:border-gold hover:text-gold"
-              >
-                Inquire About a Piece →
-              </a>
+              <InquiryButtons
+                formLabel="Inquire About a Piece"
+                waMessage="Hi, I'd like to inquire about one of your pieces."
+              />
             </div>
           )}
         </div>

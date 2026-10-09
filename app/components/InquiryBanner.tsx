@@ -1,20 +1,18 @@
-import Link from "next/link";
+import InquiryButtons from "./InquiryButtons";
 
 interface InquiryBannerProps {
   heading?: string;
   subtext?: string;
-  ctaLabel?: string;
-  ctaHref?: string;
   variant?: "dark" | "gold";
+  waMessage?: string;
 }
 
 export default function InquiryBanner({
   heading = "Interested in a Piece?",
   subtext =
     "We welcome bespoke commissions and international inquiries. Every piece can be crafted to your specifications.",
-  ctaLabel = "Send an Inquiry",
-  ctaHref = "/contact",
   variant = "dark",
+  waMessage,
 }: InquiryBannerProps) {
   const isDark = variant === "dark";
 
@@ -47,19 +45,11 @@ export default function InquiryBanner({
           {subtext}
         </p>
         <div className="mt-6">
-          <Link
-            href={ctaHref}
-            className={`inline-flex items-center gap-2 px-9 py-3.5 font-sans text-[0.8rem] tracking-[0.12em] uppercase transition-colors duration-250 border ${
-              isDark
-                ? "bg-gold text-walnut font-bold border-gold hover:bg-gold-light hover:border-gold-light"
-                : "bg-walnut text-gold-pale font-semibold border-walnut hover:bg-gold hover:border-gold hover:text-walnut"
-            }`}
-          >
-            {ctaLabel}
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M5 12h14M12 5l7 7-7 7" />
-            </svg>
-          </Link>
+          <InquiryButtons
+            variant={isDark ? "dark" : "light"}
+            waMessage={waMessage}
+            formLabel="Send an Inquiry"
+          />
         </div>
       </div>
     </section>

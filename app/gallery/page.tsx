@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import Image from "next/image";
 import Lightbox, { GalleryImage } from "../components/Lightbox";
+import InquiryButtons from "../components/InquiryButtons";
 
 /* ── Types ─────────────────────────────────────── */
 interface GalleryItem {
@@ -251,12 +252,10 @@ export default function GalleryPage() {
                 Showing {images.length} piece{images.length !== 1 ? "s" : ""}
                 {!hasNext ? " — all loaded" : ""}
               </p>
-              <a
-                href="/contact"
-                className="font-sans text-[0.7rem] font-semibold tracking-[0.14em] uppercase text-walnut border border-border px-6 py-2.5 no-underline transition-colors duration-200 hover:border-gold hover:text-gold"
-              >
-                Inquire About a Piece →
-              </a>
+              <InquiryButtons
+                formLabel="Inquire About a Piece"
+                waMessage="Hi, I'd like to inquire about one of your gallery pieces."
+              />
             </div>
           )}
         </div>
