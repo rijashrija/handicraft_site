@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import WhatsAppWidget from "./components/WhatsAppWidget";
+import { getNavlinks } from "./lib/api";
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
@@ -46,16 +47,23 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  let navlinks;
+  try {
+    navlinks = await getNavlinks();
+  } catch {
+    // Navbar will use its built-in defaults if this fails
+  }
+
   return (
     <html
       lang="en"
       className={`${cormorant.variable} ${jost.variable}`}
     >
       <body>
-        <Navbar />
+        <Navbar navlinks={navlinks} />
         <main>{children}</main>
         <Footer />
         <WhatsAppWidget />

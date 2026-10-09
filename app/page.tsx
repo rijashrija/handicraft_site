@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { getProducts, getHome, getCategories } from "./lib/api";
 import ProductSlider from "./components/ProductSlider";
+import CategorySlider from "./components/CategorySlider";
 import InquiryBanner from "./components/InquiryBanner";
 import defaultHomeData from "../data/home.json";
 
@@ -82,55 +83,8 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ── CATEGORY CARDS ───────────────────────────────────── */}
-      <section className="section bg-cream">
-        <div className="container">
-          <div className="text-center mb-12">
-            <span className="block font-sans text-[0.7rem] font-semibold tracking-[0.2em] uppercase text-stone mb-3">
-              Explore by Category
-            </span>
-            <h2 className="font-serif font-normal text-[clamp(1.75rem,3vw,2.75rem)]">
-              Our Collections
-            </h2>
-            <span className="block w-12 h-0.5 bg-gold mx-auto mt-5" />
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-0.5">
-            {categories.map((cat: any) => (
-              <Link
-                key={cat.slug}
-                href={`/products?category=${cat.slug}`}
-                className="group block overflow-hidden"
-              >
-                <div className="relative aspect-[3/4] overflow-hidden">
-                  <Image
-                    src={cat.image}
-                    alt={cat.title}
-                    fill
-                    sizes="(max-width: 768px) 100vw, 33vw"
-                    className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-walnut/85 to-walnut/10" />
-                  <div className="absolute bottom-0 left-0 right-0 p-8">
-                    <span className="block font-sans text-[0.7rem] font-semibold tracking-[0.2em] uppercase text-gold mb-2">
-                      {cat.label}
-                    </span>
-                    <h3 className="font-serif font-normal text-2xl text-cream mb-3 leading-tight">
-                      {cat.title}
-                    </h3>
-                    <p className="text-sm text-cream/65 leading-relaxed mb-5">
-                      {cat.description}
-                    </p>
-                    <span className="font-sans text-[0.7rem] font-semibold tracking-[0.15em] uppercase text-gold-light">
-                      Explore →
-                    </span>
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* ── CATEGORY SLIDER ───────────────────────────────────── */}
+      <CategorySlider categories={categories} />
 
       {/* ── FEATURED PRODUCTS SLIDER ───────────────────────────── */}
       <ProductSlider products={featured} title="Featured Pieces" subtitle="Curated Selection" />

@@ -30,7 +30,7 @@ export default async function ContactPage() {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-[1.5fr_1fr] gap-[clamp(3rem,8vw,6rem)] items-start">
-            
+
             {/* Left: Form */}
             <div>
               <h2 className="font-serif text-3xl mb-8">Send us a Message</h2>
@@ -55,11 +55,9 @@ export default async function ContactPage() {
                     {location.street}<br />
                     {location.city}
                   </p>
-                  <a href="https://maps.app.goo.gl/pUjEU189DbAEsSP16" target="_blank" rel="noopener noreferrer" className="inline-block text-[0.85rem] text-gold hover:text-white transition-colors underline underline-offset-4 decoration-gold/50 hover:decoration-white">
-                    View on Google Maps
-                  </a>
+
                 </div>
-                
+
                 <div>
                   <div className="text-[0.65rem] tracking-[0.1em] uppercase text-gold mb-1.5">Direct Contact</div>
                   <a href={`mailto:${email}`} className="block text-white/80 text-[0.95rem] hover:text-gold transition-colors mb-1.5">
@@ -86,13 +84,13 @@ export default async function ContactPage() {
 
           {/* Map Embed */}
           <div className="mt-16 w-full h-[400px] rounded-lg overflow-hidden shadow-lg border border-gold/20 bg-walnut/5">
-            <iframe 
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3532.796915860133!2d85.3298491!3d27.6715024!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39eb19f3a0d4dd23%3A0x4c891e8caeb91666!2sNepals%20Handicrafts!5e0!3m2!1sen!2sus!4v1791090040377!5m2!1sen!2sus" 
-              width="100%" 
-              height="100%" 
-              style={{ border: 0 }} 
-              allowFullScreen 
-              loading="lazy" 
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3532.796915860133!2d85.3298491!3d27.6715024!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39eb19f3a0d4dd23%3A0x4c891e8caeb91666!2sNepals%20Handicrafts!5e0!3m2!1sen!2sus!4v1791090040377!5m2!1sen!2sus"
+              width="100%"
+              height="100%"
+              style={{ border: 0 }}
+              allowFullScreen
+              loading="lazy"
               referrerPolicy="strict-origin-when-cross-origin"
               title="Nepals Handicrafts Location Map"
             ></iframe>

@@ -1,0 +1,70 @@
+/* CategorySlider.css — infinite marquee animation */
+
+.category-marquee-wrapper {
+  width: 100%;
+  overflow: hidden;
+  /* Subtle fade edges */
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 6%,
+    black 94%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 6%,
+    black 94%,
+    transparent 100%
+  );
+}
+
+.category-marquee-track {
+  display: flex;
+  gap: 1.5rem;
+  width: max-content;
+
+  /* Speed: total time = item-count * 6s per item (adjust as desired) */
+  animation: marquee-scroll calc(var(--item-count, 4) * 6s) linear infinite;
+}
+
+/* Pause on hover for user interaction */
+.category-marquee-wrapper:hover .category-marquee-track {
+  animation-play-state: paused;
+}
+
+@keyframes marquee-scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    /* Scroll exactly 1/3 of the track (one full copy of items) */
+    transform: translateX(calc(-33.333%));
+  }
+}
+
+.category-marquee-card {
+  /* Card size */
+  width: 320px;
+  height: 420px;
+  flex-shrink: 0;
+  display: block;
+  overflow: hidden;
+  position: relative;
+  border-radius: 1px;
+  /* Subtle lift on hover */
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.category-marquee-card:hover {
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18);
+  transform: translateY(-4px);
+}
+
+@media (min-width: 768px) {
+  .category-marquee-card {
+    width: 380px;
+    height: 480px;
+  }
+}

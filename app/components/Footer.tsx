@@ -1,9 +1,11 @@
 import Link from "next/link";
-import { getContact } from "../lib/api";
+import { getContact, getCategories, getNavlinks } from "../lib/api";
 import defaultContactData from "../../data/contact.json";
 
 export default async function Footer() {
   let contact = defaultContactData;
+  let categories: any[] = [];
+  
   try {
     const data = await getContact();
     if (data && data.email) {
@@ -11,6 +13,54 @@ export default async function Footer() {
     }
   } catch (err) {
     // fallback to static JSON
+    contact = {
+      heading: "Bespoke Inquiries and Custom Orders",
+      subheading: "Get in Touch",
+      intro: "We work with clients globally, offering insured shipping for all our handcrafted pieces. Reach out to discuss availability, pricing, or commissioned works.",
+      location: {
+        street: "Bholdhoka, Lalitpur",
+        city: "Patan, Nepal"
+      },
+      email: "lbajracharya2019@gmail.com",
+      phone: "+977 9843644982",
+      phoneHref: "tel:+9779845510022",
+      socials: [
+        { label: "Instagram", href: "https://www.instagram.com/nepals_handicrafts/" },
+        { label: "Facebook", href: "https://www.facebook.com/profile.php?id=61590620619068" },
+        { label: "WhatsApp", href: "#" }
+      ]
+    };
+  }
+
+  try {
+    const catData = await getCategories();
+    if (Array.isArray(catData)) {
+      categories = catData;
+    }
+  } catch (err) {
+    // fallback if categories fail to load
+    categories = [
+      { slug: "silver-idols", label: "Silver Idols" },
+      { slug: "necklaces", label: "Necklaces" },
+      { slug: "artifacts", label: "Cultural Artifacts" },
+      { slug: "gemstone", label: "Gemstone Pieces" }
+    ];
+  }
+
+  let navlinks: { href: string; label: string }[] = [];
+  try {
+    const navData = await getNavlinks();
+    if (Array.isArray(navData)) {
+      navlinks = navData;
+    }
+  } catch (err) {
+    // fallback if navlinks fail to load
+    navlinks = [
+      { href: "/", label: "Home" },
+      { href: "/products", label: "Collection" },
+      { href: "/about", label: "About Us" },
+      { href: "/contact", label: "Contact & Inquire" },
+    ];
   }
 
   const { location, email, phone, phoneHref, socials } = contact;
@@ -43,12 +93,7 @@ export default async function Footer() {
               Navigate
             </div>
             <div className="flex flex-col gap-3">
-              {[
-                { href: "/", label: "Home" },
-                { href: "/products", label: "Collection" },
-                { href: "/about", label: "About Us" },
-                { href: "/contact", label: "Contact & Inquire" },
-              ].map((link) => (
+              {navlinks.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
@@ -66,18 +111,13 @@ export default async function Footer() {
               Collections
             </div>
             <div className="flex flex-col gap-3">
-              {[
-                { href: "/products?category=silver-idols", label: "Silver Idols" },
-                { href: "/products?category=necklaces", label: "Necklaces" },
-                { href: "/products?category=artifacts", label: "Cultural Artifacts" },
-                { href: "/products?category=gemstone", label: "Gemstone Pieces" },
-              ].map((link) => (
+              {categories.filter(c => c.is_visible !== false).slice(0, 4).map((category) => (
                 <Link
-                  key={link.href}
-                  href={link.href}
-                  className="text-white/55 text-sm hover:text-gold-light transition-colors duration-200"
+                  key={category.slug}
+                  href={`/products?category=${category.slug}`}
+                  className="text-white/55 text-sm hover:text-gold-light transition-colors duration-200 capitalize"
                 >
-                  {link.label}
+                  {category.label}
                 </Link>
               ))}
             </div>

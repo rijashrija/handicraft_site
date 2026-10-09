@@ -36,7 +36,14 @@ export async function getCategories() {
 }
 
 export async function getContact() {
-    const res = await fetch(`${API_URL}/api/v1/contact`, { cache: 'no-store' })
+    const res = await fetch(`${API_URL}/api/v1/contact/info`, { cache: 'no-store' })
     if (!res.ok) throw new Error('Failed to fetch contact data')
     return res.json()
 }
+
+export async function getNavlinks() {
+    const res = await fetch(`${API_URL}/api/v1/navlinks`, { cache: 'no-store' })
+    if (!res.ok) throw new Error('Failed to fetch navlinks')
+    return res.json()
+}
+

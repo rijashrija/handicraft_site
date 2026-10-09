@@ -4,7 +4,21 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-export default function Navbar() {
+type NavLink = { href: string; label: string };
+
+interface NavbarProps {
+  navlinks?: NavLink[];
+}
+
+const DEFAULT_NAVLINKS: NavLink[] = [
+  { href: "/", label: "Home" },
+  { href: "/products", label: "Collection" },
+  { href: "/gallery", label: "Gallery" },
+  { href: "/about", label: "About Us" },
+  { href: "/contact", label: "Contact & Inquire" },
+];
+
+export default function Navbar({ navlinks = DEFAULT_NAVLINKS }: NavbarProps) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
@@ -23,6 +37,24 @@ export default function Navbar() {
 
   const isTransparent = isHome && !scrolled;
 
+  // Split links: left side (all except last 2), right side (last 2 before "Inquire" CTA)
+  // We treat the last link (Contact) as a CTA button, and split the rest left/right of logo
+  const inquireLink = navlinks.find(
+    (l) => l.href === "/contact" || l.label.toLowerCase().includes("contact")
+  );
+  const mainLinks = navlinks.filter((l) => l !== inquireLink);
+  const leftLinks = mainLinks.slice(0, Math.ceil(mainLinks.length / 2));
+  const rightLinks = mainLinks.slice(Math.ceil(mainLinks.length / 2));
+
+  const linkClass = (href: string) =>
+    `font-sans text-xs font-medium tracking-[0.12em] uppercase relative pb-[2px] transition-colors duration-200 border-b ${
+      pathname === href
+        ? isTransparent
+          ? "opacity-100 border-gold-light"
+          : "opacity-100 border-gold"
+        : "opacity-70 border-transparent"
+    } ${isTransparent ? "text-cream hover:opacity-100" : "text-walnut hover:text-gold"}`;
+
   return (
     <>
       <nav
@@ -33,32 +65,15 @@ export default function Navbar() {
         <div className="container flex items-center justify-between h-full">
           {/* Left nav links */}
           <div className="hidden md:flex gap-8 items-center flex-1">
-            {[
-              { href: "/", label: "Home" },
-              { href: "/products", label: "Collection" },
-              { href: "/gallery", label: "Gallery" },
-            ].map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={`font-sans text-xs font-medium tracking-[0.12em] uppercase relative pb-[2px] transition-colors duration-200 border-b ${
-                  pathname === link.href
-                    ? isTransparent
-                      ? "opacity-100 border-gold-light"
-                      : "opacity-100 border-gold"
-                    : "opacity-70 border-transparent"
-                } ${isTransparent ? "text-cream hover:opacity-100" : "text-walnut hover:text-gold"}`}
-              >
+            {leftLinks.map((link) => (
+              <Link key={link.href} href={link.href} className={linkClass(link.href)}>
                 {link.label}
               </Link>
             ))}
           </div>
 
           {/* Center logo */}
-          <Link
-            href="/"
-            className="flex-1 flex flex-col items-center text-center"
-          >
+          <Link href="/" className="flex-1 flex flex-col items-center text-center">
             <span
               className={`font-serif text-2xl tracking-[0.06em] block transition-colors duration-300 ${
                 isTransparent ? "text-gold-light" : "text-gold"
@@ -75,35 +90,25 @@ export default function Navbar() {
             </span>
           </Link>
 
-          {/* Right nav links */}
+          {/* Right nav links + CTA */}
           <div className="hidden md:flex gap-8 items-center flex-1 justify-end">
-            {[
-              { href: "/about", label: "About" },
-            ].map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={`font-sans text-xs font-medium tracking-[0.12em] uppercase relative pb-[2px] transition-colors duration-200 border-b ${
-                  pathname === link.href
-                    ? isTransparent
-                      ? "opacity-100 border-gold-light"
-                      : "opacity-100 border-gold"
-                    : "opacity-70 border-transparent"
-                } ${isTransparent ? "text-cream hover:opacity-100" : "text-walnut hover:text-gold"}`}
-              >
+            {rightLinks.map((link) => (
+              <Link key={link.href} href={link.href} className={linkClass(link.href)}>
                 {link.label}
               </Link>
             ))}
-            <Link
-              href="/contact"
-              className={`font-sans text-[0.7rem] font-semibold tracking-[0.14em] uppercase px-5 py-2 border transition-all duration-200 ${
-                isTransparent
-                  ? "text-gold-light border-gold-light/60 hover:bg-white/10"
-                  : "text-walnut border-border hover:border-gold hover:text-gold"
-              }`}
-            >
-              Inquire
-            </Link>
+            {inquireLink && (
+              <Link
+                href={inquireLink.href}
+                className={`font-sans text-[0.7rem] font-semibold tracking-[0.14em] uppercase px-5 py-2 border transition-all duration-200 ${
+                  isTransparent
+                    ? "text-gold-light border-gold-light/60 hover:bg-white/10"
+                    : "text-walnut border-border hover:border-gold hover:text-gold"
+                }`}
+              >
+                Inquire
+              </Link>
+            )}
           </div>
 
           {/* Hamburger */}
@@ -138,13 +143,7 @@ export default function Navbar() {
           menuOpen ? "opacity-100 visible" : "opacity-0 invisible"
         }`}
       >
-        {[
-          { href: "/", label: "Home" },
-          { href: "/products", label: "Collection" },
-          { href: "/gallery", label: "Gallery" },
-          { href: "/about", label: "About" },
-          { href: "/contact", label: "Contact & Inquire" },
-        ].map((link) => (
+        {navlinks.map((link) => (
           <Link
             key={link.href}
             href={link.href}
