@@ -2,22 +2,12 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useSearchParams } from "next/navigation";
-import Image from "next/image";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import ProductCard from "../components/ProductCard";
 import InquiryButtons from "../components/InquiryButtons";
 
 type Category = { slug: string; label: string };
-type Product = {
-  slug: string;
-  name: string;
-  category: { slug: string; label: string } | null;
-  category_label: string;
-  image: string;
-  featured: boolean;
-  material?: string;
-  stones?: string;
-};
+import type { Product } from "../lib/products";
 
 /* ── Main content ──────────────────────────────── */
 export default function ProductsContent({
@@ -28,23 +18,28 @@ export default function ProductsContent({
   categories: Category[];
 }) {
   const searchParams = useSearchParams();
-  const [active, setActive] = useState(
-    searchParams.get("category") || "all"
-  );
+  const router = useRouter();
+  const active = searchParams.get("category") || "all";
   const [visibleCount, setVisibleCount] = useState(12);
   const sentinelRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    setActive(searchParams.get("category") || "all");
+  const selectCategory = (category: string) => {
     setVisibleCount(12);
-  }, [searchParams]);
+    const params = new URLSearchParams(searchParams.toString());
+    if (category === "all") {
+      params.delete("category");
+    } else {
+      params.set("category", category);
+    }
+    const query = params.toString();
+    router.push(`/products${query ? `?${query}` : ""}`, { scroll: false });
+  };
 
   const filtered =
     active === "all"
       ? products
       : products.filter(
-          (p) =>
-            p.category?.slug?.toLowerCase() === active.toLowerCase()
+          (p) => p.category.toLowerCase() === active.toLowerCase()
         );
 
   /* Infinite scroll */
@@ -77,7 +72,7 @@ export default function ProductsContent({
           {/* All Pieces tab */}
           <button
             id="filter-all"
-            onClick={() => { setActive("all"); setVisibleCount(12); }}
+            onClick={() => selectCategory("all")}
             className={`font-sans text-[0.7rem] font-semibold tracking-[0.15em] uppercase px-6 py-4 border-none border-b-2 bg-transparent cursor-pointer transition-colors duration-200 whitespace-nowrap ${
               active === "all"
                 ? "border-gold text-gold"
@@ -91,7 +86,7 @@ export default function ProductsContent({
             <button
               key={cat.slug}
               id={`filter-${cat.slug}`}
-              onClick={() => { setActive(cat.slug); setVisibleCount(12); }}
+              onClick={() => selectCategory(cat.slug)}
               className={`font-sans text-[0.7rem] font-semibold tracking-[0.15em] uppercase px-6 py-4 border-none border-b-2 bg-transparent cursor-pointer transition-colors duration-200 whitespace-nowrap ${
                 active === cat.slug
                   ? "border-gold text-gold"

@@ -1,33 +1,31 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { getProductBySlug, getRelatedProducts, products } from "../../lib/products";
+import { getProduct, getProducts } from "../../lib/api";
 import ProductCard from "../../components/ProductCard";
 import InquiryBanner from "../../components/InquiryBanner";
 import InquiryButtons from "../../components/InquiryButtons";
 import Link from 'next/link'
-export async function generateStaticParams() {
-  return products.map((p) => ({ slug: p.slug }));
-}
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const product = getProductBySlug(slug);
+  const product = await getProduct(slug);
   if (!product) return {};
-  return { title: product.name, description: product.shortDesc };
+  return { title: product.name, description: product.shortDesc ?? undefined };
 }
 
 export default async function ProductDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const product = getProductBySlug(slug);
+  const product = await getProduct(slug);
   if (!product) notFound();
-  const related = getRelatedProducts(slug, product.category, 20);
+  const products = await getProducts(product.category);
+  const related = products.filter((item) => item.slug !== slug).slice(0, 20);
 
   const specs = [
-    { key: "Material", val: product.material },
+    ...(product.material ? [{ key: "Material", val: product.material }] : []),
     ...(product.stones ? [{ key: "Stones", val: product.stones }] : []),
     ...(product.weight ? [{ key: "Weight", val: product.weight }] : []),
     ...(product.dimensions ? [{ key: "Dimensions", val: product.dimensions }] : []),
-    { key: "Finish", val: product.finish },
+    ...(product.finish ? [{ key: "Finish", val: product.finish }] : []),
   ];
 
   return (

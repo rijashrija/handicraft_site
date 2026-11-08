@@ -2,6 +2,8 @@ import { Suspense } from "react";
 import { getProducts, getCategories } from "../lib/api";
 import ProductsContent from "./ProductsContent";
 import InquiryBanner from "../components/InquiryBanner";
+import type { Category } from "../lib/api";
+import type { Product } from "../lib/products";
 
 export const metadata = {
   title: "The Collection",
@@ -10,8 +12,8 @@ export const metadata = {
 };
 
 export default async function ProductsPage() {
-  let products: any[] = [];
-  let categories: any[] = [];
+  let products: Product[] = [];
+  let categories: Category[] = [];
 
   try {
     const [productsRes, categoriesRes] = await Promise.all([

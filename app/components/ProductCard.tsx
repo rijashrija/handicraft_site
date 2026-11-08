@@ -3,13 +3,10 @@ import Link from "next/link";
 import type { Product } from "../lib/products";
 
 interface ProductCardProps {
-  product: any; // Using any or a unified type since Django/FastAPI schemas differ slightly (e.g. categoryLabel vs category_label)
+  product: Product;
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
-  // Support both property names
-  const catLabel = product.category_label || product.categoryLabel || product.category?.label || "";
-
   return (
     <Link href={`/products/${product.slug}`} className="group block no-underline">
       <article>
@@ -50,7 +47,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         {/* Text info below card */}
         <div className="pt-4">
           <span className="block font-sans text-[0.65rem] font-semibold tracking-[0.18em] uppercase text-gold mb-1.5">
-            {catLabel}
+            {product.categoryLabel}
           </span>
           <h3 className="font-serif text-[clamp(1.1rem,1.5vw,1.3rem)] font-medium text-walnut leading-[1.25] mb-1.5">
             {product.name}

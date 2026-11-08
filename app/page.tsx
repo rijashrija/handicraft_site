@@ -1,15 +1,17 @@
 import Image from "next/image";
 import Link from "next/link";
 import { getProducts, getHome, getCategories } from "./lib/api";
+import type { Category } from "./lib/api";
+import type { Product } from "./lib/products";
 import ProductSlider from "./components/ProductSlider";
 import CategorySlider from "./components/CategorySlider";
 import InquiryBanner from "./components/InquiryBanner";
 import defaultHomeData from "../data/home.json";
 
 export default async function HomePage() {
-  let featured: any[] = [];
-  let homeData: any = defaultHomeData;
-  let categories: any[] = [];
+  let featured: Product[] = [];
+  let homeData = defaultHomeData;
+  let categories: Category[] = [];
 
   try {
     const [featuredRes, homeRes, categoriesRes] = await Promise.all([

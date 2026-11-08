@@ -179,7 +179,8 @@ export default function ContactForm() {
     setSubmitError(null);
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/v1/contact/inquire`, {
+      const apiUrl = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000").replace(/\/+$/, "");
+      const response = await fetch(`${apiUrl}/api/v1/contact/inquiry`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -195,8 +196,8 @@ export default function ContactForm() {
 
       // Success! Show the success screen.
       setSubmitted(true);
-    } catch (err: any) {
-      setSubmitError(err.message || "An unexpected error occurred.");
+    } catch (err: unknown) {
+      setSubmitError(err instanceof Error ? err.message : "An unexpected error occurred.");
     } finally {
       setIsSubmitting(false);
     }
@@ -354,4 +355,3 @@ export default function ContactForm() {
     </form>
   );
 }
-
